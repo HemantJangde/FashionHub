@@ -16,6 +16,7 @@ import Layout from "./components/Layout";
 import Contact from "./pages/Contact";
 import Footer from "./components/Footer";
 import About from "./pages/About";
+import ProductDetailDynamic from "./pages/ProductDetailDynamic";
 
 function App() {
   return (
@@ -23,12 +24,15 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/collection" element={<Home />} />
         <Route path="/" element={<Layout/>} />
         <Route path="/contact" element={<Contact/>} />
 
 
-        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/product/:id" element={<ProductDetailDynamic />} />
+
+
         <Route path="/orders" element={<MyOrders />} />
         <Route
           path="/cart"

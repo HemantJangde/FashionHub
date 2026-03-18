@@ -162,7 +162,7 @@ function AdminAddProduct() {
       if (image) formData.append("image", image); // optional
 
       await axios.post(
-        "http://localhost:5000/api/products",
+        "http://localhost:5000/api/product",
         formData,
         {
           headers: {
@@ -183,16 +183,17 @@ function AdminAddProduct() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto" }}>
-      <h2>Add Product</h2>
+    <div className="max-w-md mx-auto p-6 bg-white shadow rounded-lg mt-10">
+      <h2 className="text-2xl font-bold mb-6 text-center">Add New Product</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"
           name="name"
           placeholder="Product Name"
           required
           onChange={handleChange}
+          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <input
@@ -201,12 +202,14 @@ function AdminAddProduct() {
           placeholder="Price"
           required
           onChange={handleChange}
+          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <textarea
           name="description"
           placeholder="Description"
           onChange={handleChange}
+          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
         />
 
         <input
@@ -215,26 +218,31 @@ function AdminAddProduct() {
           placeholder="Stock"
           required
           onChange={handleChange}
+          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <input
           type="file"
           accept="image/*"
           onChange={handleImageChange}
+          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        {/* Preview uploaded image */}
         {preview && (
-          <div style={{ margin: "10px 0" }}>
+          <div className="mt-2 flex justify-center">
             <img
               src={preview}
               alt="Preview"
-              style={{ width: "100px", height: "100px", objectFit: "cover" }}
+              className="w-28 h-28 object-cover rounded border"
             />
           </div>
         )}
 
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
+        >
           {loading ? "Uploading..." : "Add Product"}
         </button>
       </form>

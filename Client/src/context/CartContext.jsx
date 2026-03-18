@@ -20,15 +20,32 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
 
-    const updateCartQty = (productId, newQty) => {
-    if (newQty < 1) return; // optional: prevent going below 1
-    setCart((prev) =>
-      prev.map((item) =>
+  const updateCartQty = async (productId, newQty) => {
+  if (newQty < 1) return;
+
+  // Filter out invalid items
+  const validCart = cart.filter(item => item.product);
+
+  try {
+    // Update backend
+    await axios.put(
+      "http://localhost:5000/api/cart",
+      { productId, qty: newQty },
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+
+    // Update local state
+    setCart(prev =>
+      validCart.map(item =>
         item.product._id === productId ? { ...item, qty: newQty } : item
       )
     );
-  };
-
+  } catch (error) {
+    console.error("Failed to update cart quantity:", error);
+  }
+};
   const fetchCart = async () => {
     try {
       const { data } = await axios.get(

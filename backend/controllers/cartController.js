@@ -42,3 +42,24 @@ export const removeFromCart = async (req, res) => {
 
   res.json(user.cart);
 };
+
+// Update quantity
+export const updateCartQty = async (req, res) => {
+  const { productId, qty } = req.body;
+
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const cartItem = user.cart.find(item => item.product.toString() === productId);
+    if (!cartItem) return res.status(404).json({ message: "Product not in cart" });
+
+    cartItem.qty = qty;
+    await user.save();
+
+    res.status(200).json(user.cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

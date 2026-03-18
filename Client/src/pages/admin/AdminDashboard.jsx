@@ -1,23 +1,48 @@
 import { Link } from "react-router-dom";
 
 function AdminDashboard() {
-  return (
-    <div>
-      <h1>Admin Dashboard</h1>
+  const cards = [
+    {
+      title: "Manage Products",
+      description: "View, edit, or delete existing products",
+      link: "/admin/products",
+      color: "bg-blue-500",
+    },
+    {
+      title: "Manage Orders",
+      description: "Track and update all customer orders",
+      link: "/admin/orders",
+      color: "bg-green-500",
+    },
+    {
+      title: "Add Product",
+      description: "Create new products for your store",
+      link: "/admin/add",
+      color: "bg-red-500",
+    },
+  ];
 
-      <ul>
-        <li>
-          <Link to="/admin/products">Manage Products</Link>
-        </li>
-        <li>
-          <Link to="/admin/orders">Manage Orders</Link>
-        </li>
-        <li>
-          <Link to="/admin/add">
-         Add Product
+  return (
+    <div className="max-w-6xl mx-auto py-10 px-4">
+      {/* <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1> */}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {cards.map((card) => (
+          <Link
+            to={card.link}
+            key={card.title}
+            className={`p-6 rounded-lg shadow hover:shadow-lg transition ${card.color} text-white flex flex-col justify-between`}
+          >
+            <div>
+              <h2 className="text-xl font-semibold mb-2">{card.title}</h2>
+              <p className="text-sm">{card.description}</p>
+            </div>
+            <span className="mt-4 inline-block font-medium underline">
+              Go &rarr;
+            </span>
           </Link>
-        </li>
-      </ul>
+        ))}
+      </div>
     </div>
   );
 }

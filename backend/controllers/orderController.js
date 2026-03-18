@@ -3,30 +3,32 @@ import User from "../models/User.js";
 
 // ✅ Place Order
 export const placeOrder = async (req, res) => {
-  const user = await User.findById(req.user._id).populate("cart.product");
+  const { address, paymentMethod, items } = req.body;
 
-  if (user.cart.length === 0) {
+  if (!items || !items.length) {
     return res.status(400).json({ message: "Cart is empty" });
   }
 
+  // ✅ Filter out null products
+  const validItems = items.filter(item => item.product);
+
+  if (!validItems.length) {
+    return res.status(400).json({ message: "No valid products in cart" });
+  }
+
+  const orderItems = validItems.map(item => ({
+    product: item.product._id,
+    qty: item.qty,
+  }));
+
   const order = new Order({
-    user: user._id,
-    orderItems: user.cart.map((item) => ({
-      product: item.product._id,
-      qty: item.qty,
-    })),
-    totalPrice: user.cart.reduce(
-      (acc, item) => acc + item.product.price * item.qty,
-      0
-    ),
+    user: req.user._id,
+    orderItems,
+    address,
+    paymentMethod,
   });
 
   const createdOrder = await order.save();
-
-  // 🧹 clear cart after order
-  user.cart = [];
-  await user.save();
-
   res.status(201).json(createdOrder);
 };
 

@@ -1,26 +1,17 @@
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext";
 
-function ProductCard({ product }) {
-  const { addToCart } = useCart();
-  console.log(product);
-  
-
+export default function ProductCard({ product }) {
   return (
-    <div style={{ border: "1px solid #ddd", padding: "10px", borderRadius: "10px", width: "200px" }}>
-      
-      <Link to={`/product/${product._id}`}>
-        <img src={product.image} width="100%" />
-        <h3>{product.name}</h3>
-        <p>₹{product.price}</p>
-      </Link>
-
-      <button onClick={() => addToCart(product)}>
-        Add to Cart
-      </button>
-
-    </div>
+    <Link to={`/products/${product.id}`} className="text-gray-700 cursor-pointer">
+      <div className="overflow-hidden">
+        <img
+          className="hover:scale-110 transition ease-in-out"
+          src={product.image||product.img}
+          alt={product.name}
+        />
+      </div>
+      <p className="pt-3 pb-1 text-sm">{product.name}</p>
+      <p className="text-sm font-medium">₹{product.price}</p>
+    </Link>
   );
 }
-
-export default ProductCard;

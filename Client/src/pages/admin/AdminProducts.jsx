@@ -10,7 +10,7 @@ function AdminProducts() {
   const { userInfo } = useAuth();
 
   const fetchProducts = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/products");
+    const { data } = await axios.get("http://localhost:5000/api/product");
     setProducts(data);
   };
 
@@ -22,7 +22,7 @@ function AdminProducts() {
   const deleteProduct = async (id) => {
     if (!window.confirm("Delete this product?")) return;
 
-    await axios.delete(`http://localhost:5000/api/products/${id}`, {
+    await axios.delete(`http://localhost:5000/api/product/${id}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 
@@ -65,7 +65,7 @@ function AdminProducts() {
     if (editData.imageFile) formData.append("image", editData.imageFile);
 
     await axios.put(
-      `http://localhost:5000/api/products/${editId}`,
+      `http://localhost:5000/api/product/${editId}`,
       formData,
       {
         headers: {
@@ -81,78 +81,106 @@ function AdminProducts() {
   };
 
   return (
-    <div>
-      <h2>Admin Products</h2>
+    <div className="max-w-6xl mx-auto py-10 px-4">
+      <h1 className="text-3xl font-bold mb-8 text-center">Manage Products</h1>
 
-      {products.map((p) => (
-        <div
-          key={p._id}
-          style={{ border: "1px solid gray", margin: 10, padding: 10 }}
-        >
-          {editId === p._id ? (
-            <>
-              {/* ✏️ EDIT MODE */}
-              <input
-                name="name"
-                value={editData.name}
-                onChange={handleChange}
-              />
-              <input
-                type="number"
-                name="price"
-                value={editData.price}
-                onChange={handleChange}
-              />
-              <input
-                type="number"
-                name="countInStock"
-                value={editData.countInStock}
-                onChange={handleChange}
-              />
-              <textarea
-                name="description"
-                value={editData.description}
-                onChange={handleChange}
-              />
-
-              <input type="file" accept="image/*" onChange={handleImageChange} />
-
-              {/* Image preview */}
-              {preview && (
-                <div style={{ margin: "10px 0" }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {products.map((p) => (
+          <div
+            key={p._id}
+            className="border rounded-lg shadow p-4 flex flex-col items-center bg-white"
+          >
+            {editId === p._id ? (
+              <>
+                <input
+                  name="name"
+                  value={editData.name}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full mb-2"
+                  placeholder="Name"
+                />
+                <input
+                  type="number"
+                  name="price"
+                  value={editData.price}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full mb-2"
+                  placeholder="Price"
+                />
+                <input
+                  type="number"
+                  name="countInStock"
+                  value={editData.countInStock}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full mb-2"
+                  placeholder="Stock"
+                />
+                <textarea
+                  name="description"
+                  value={editData.description}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full mb-2"
+                  placeholder="Description"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="mb-2"
+                />
+                {preview && (
                   <img
                     src={preview}
                     alt="Preview"
-                    style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                    className="w-24 h-24 object-cover mb-2 rounded"
                   />
-                </div>
-              )}
-
-              <button onClick={updateProduct}>Save</button>
-              <button onClick={() => { setEditId(null); setPreview(null); }}>
-                Cancel
-              </button>
-            </>
-          ) : (
-            <>
-              {/* 👀 VIEW MODE */}
-              <img src={p.image} alt="" width="80" />
-              <h3>{p.name}</h3>
-              <p>₹{p.price}</p>
-              <p>
-                Stock:{" "}
-                {p.countInStock > 0 ? (
-                  <span style={{ color: "green" }}>{p.countInStock}</span>
-                ) : (
-                  <span style={{ color: "red" }}>Out of Stock</span>
                 )}
-              </p>
-              <button onClick={() => startEdit(p)}>Edit</button>
-              <button onClick={() => deleteProduct(p._id)}>Delete</button>
-            </>
-          )}
-        </div>
-      ))}
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={updateProduct}
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => { setEditId(null); setPreview(null); }}
+                    className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className="w-32 h-32 object-cover rounded mb-2"
+                />
+                <h3 className="text-lg font-semibold mb-1">{p.name}</h3>
+                <p className="font-medium mb-1">₹{p.price}</p>
+                <p className={`mb-2 ${p.countInStock > 0 ? "text-green-600" : "text-red-600"}`}>
+                  {p.countInStock > 0 ? `Stock: ${p.countInStock}` : "Out of Stock"}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => startEdit(p)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteProduct(p._id)}
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
