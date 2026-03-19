@@ -1,6 +1,9 @@
+import HeroImage from '../assets/home3.jpg'
+
 export default function HeroSection() {
+  
   return (
-   <div className="flex flex-col sm:flex-row border border-gray-300">
+   <div className="flex flex-col sm:flex-row border border-gray-100">
   {/* Text Section */}
   <div className="w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0">
     <div className="text-[#414141]">
@@ -20,8 +23,8 @@ export default function HeroSection() {
 
   {/* Image Section */}
   <img
-    className="w-full sm:w-1/2"
-    src="https://foreverbuy.in/assets/hero_img-DOCOb6wn.png"
+    className="w-full  sm:w-1/2"
+    src={HeroImage}
     alt="Hero"
   />
 </div>

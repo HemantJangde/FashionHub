@@ -41,9 +41,16 @@ export const getMyOrders = async (req, res) => {
   res.json(orders);
 };
 
-// 👨‍💼 Admin: Get All Orders
 export const getAllOrders = async (req, res) => {
-  const orders = await Order.find().populate("user", "name email");
+  try {
+    const orders = await Order.find()
+      .populate("user", "name email")
+      .populate("orderItems.product", "name price image") // 🔥 IMPORTANT
+      .sort({ createdAt: -1 }); // latest first
 
-  res.json(orders);
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Get Orders Error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
 };

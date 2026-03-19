@@ -2,6 +2,14 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import icon from "../assets/cart_icon.png";
+import NavImage from "../assets/nav.jpeg";
+import {
+  FiMenu,
+  FiX,
+  FiShoppingCart,
+  FiUser,
+  FiLogOut,
+} from "react-icons/fi";
 
 export default function Navbar() {
   const { userInfo, logout } = useAuth();
@@ -16,14 +24,10 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-white shadow-sm px-6 py-4 flex items-center justify-between font-medium relative">
+    <nav className="bg-white mb-1 shadow-sm px-6 py-4 flex items-center justify-between font-medium relative">
       {/* Logo */}
       <Link to="/" className="flex items-center">
-        <img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPkAAABHCAYAAADFj+GVAAAACXBIWXMAABCcAAAQnAEmzTo0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAuvSURBVHgB7Z3NcttGEseblCzLvkT7BIGqJNm3pc+p3UBPEPmcSoV+gki3/agtS7WVeG+SnyBypeIcIz2BkE3FOZq+qGzZLsNvwJz0ZZH5tzJQKGoGxADgYCD2r4pFcgYkgJnpnp6emQaRIAiCIAiCIAiCIAiCIAiCIAh2NJIPQRDMzc7OztEYefnyZUw5WVxcbE1NTbV6vd7H/X5/9/Xr150kb2lp6WGj0eji9QJf47znMZXB0dFRN47jbvL97t27Qdr/FLnPrOcoyuA9Zb3vImQ5R1VtsIx6L7OsymY6+YCbbEF49miMLCwshG/evPkp6/FcqGdnZ181m802vs7h+giCzFkxXhdCjrR1fud85s6dOxE+bx8cHDwhC0xlMDMzs423B8l3HPMu7X9wfj6Gr6+Da3+ChhWRBXzfo85RFNxTG2/n5cMNXHe+mzdvRnhbphLAf/2Ic4TD6Tj3PN666nMlbbCMesf9XdQ7XhE6pF3beh8XTfIQ1qxo6OtcqBCSVSTZavcQgr+NQn837h7RBM7fwqvNjYevA9bGl+QpqneLNVkh1wUVRNVBqMmKy7B6fILrndusT/XunZBzg4AG3UMhPaTinPeIrDCoWgKldPaqUjoZ2NEloi4+o+KEukQMvXboenNe7xD0b8tQlnnxSsiVmbrH2pBKhBWGB4LOhHx/VVa4CZT5riErpILgnk29mdVwqq6wRccdV1X17o2QcwGocVFAY4AF3ROTOeDxKXkGxqXsQ9A5jlaoAGmm+qDz9LrDHRfqvQzr1JrpDMfE7EigEsBYxeh9hKbbpHQB78K828Z/xHhdcpzg+njsy2OhlRH/sYVG91PRcSCcgaEpj2cA6I9GnSYcIa4jzOGYKbMu3g9+73Q6XQwnWOjCwXQ0zrmc15oQ6hIt78NJGxxFCfW+irJ07pAbKeRcuPBSP6AxghtnIW2b8iHcW6enpxumKQrlRefXmvov1pjB8HHcYJH3LRX0GI+YIeC8x9yD4bp5aq+tO0hdY0R2xGOuCx4jh8OJuI9Pyf5azzGZ6qywKft/jL0NZqHCei+EF+Z6mpMNeesw69ayzkFCS26jgFmIY8Mh570ojRm2Frhh8vVThddhg2lcjvRcJnuaqW4zlVonknrHxy3DIeH8/PzH5JDKhVw19ECXp+a6N8gSLmgl6F3D/zobG6nrj3R5qof0hpSptFZOp1GoSyzL9PaZV69erZGho8HQtJCfw5bKhRwVbpyiwfjJWsATVIPdMJyz5dLTCYVjuo9SZxFKQjutBaeRtdOyDFO95mh7c25/5BAfzHXtDXMvXtRBduvWrW3S9OY8Nr9x40ZAjjB5rsueKiyDlKk0q95nEk31YdD+tFOEruvdByEPdIllaHv2GENZaHsmFPRfyRF8HaQ33QLyDOX5vaKQclg/oS5xEkz1hJR6dzpf7uWyVgbTFTGVQ0weoNay1wKdILL1w2u8KSP4j6906RNkqifEmrSAHOKtkAvVAYGOdOlQvJmWuCpT/YpCgOB3J8VU9wkRckdAcILhNG705CGmsaRabDSSFGfqdV+rnpWYHCJC7o4r4zAIfkweosaSkSYryDjH29Yl4n4nUch1Q5yYHCJC7oBWq8UCrjNfY/IUk4Ns1BxvmqmOueNdmiBUWVxR7q4tOBFyBxwdHWkFwzT29YHh/QEDpAq5mOqXCA3pTstChHzMqN112hV28DR764QyTaXR6EASbV3ipJnqatu0tt5TFOhYECEfIywMvI+Y9FMm3m+1NK0xMAWSMJnqzCSZ6lzvUOC8nTjQZEeuo+GM3IXGXmHe2UUW8CYRmmC4ktUy0FUyr8tfJ3us6wJDhZ28AQa5xzHsDgxJE/DBZKqblEVWbNsgBKx7cHDg3HLIUu8fPnzYIsdk2U8e6gLwjWCbrjEcxiklO6ARix3yBJlM/lttlc0MBISvNZeQz87O7hweHurOx+Ny3dbPNukpKnBWbVDNWpQu5GXU+9u3b51bNFmEXLhKSPmJi2y8cYkKJBFRhkASagyqNdVPTk6ui6keUk54xSPKYY0qQMbkDuGKPj4+vlenCKWmqbThbbJpprqv8cgdEkHAl6sqBxFyh/DuI5jAq1QjTJ5g3Es4lNQmPRO/yo0tHIzV21QRIuSO8ShybCYsptK0vZTr6SIf4eEN3jarqvcsMd54mkfWHA/ADpS0fLVOncenc4bfc+TYTg4PcDzq3Jpz/UYFYZNbF7NMTaUlDkRdfLhSpots2yA/MovGQBn1DkGPvAvkCDp5QjBdZ7IGFVRBJTkKrW7d+iZ6wshynBZXURcpU2nsZT8Xcg42gWMuTQ/ZKqQUvGiDZdS7mh2ZJ4eIuT5GeL3A1NSUKdYcx1/3KsabCZ5KM2SFyQfVY19a3DOpproKJnrfkB24DuApU2hjZn9/vwPTfCt5KOMgqnf0fnrJYiqN35NptKhOswhlw2WCMmPL5oqjFTMTvGAmohz8/Oi7sElN/B6Oz34/UMkd6lPnrNHb/fu/vriikKUnd8Dt27cfG7JCqg/a3nwwkMRgfLgSTfXaAmE2xXgLyZJfH/0QPHv0dK/Zb+5BoNsDAs60qEHtKWr++Oybp+9+ffjDYJ4IuQtM+7O5J3Qdgzsvps00g4EkBj3x4lUnUnsTOpqswCZe3i9ff9/q9XvPs6z661M/6M30nvNvkjQRcnfoKpump6f/QjVANdhYk3UpkIRapz7RpvoQkS4RCv4jygD34OileTltZqWA4/nYvaRHFyF3BCr1hS4dPV4tenKFaVfaRW/OW0oh6I9JSIh1iXDIBpQB9RDQ7AKeAEE/m/ljn8O1F3K1EEGX7nSJIcau2p4clWhfgRWRJSY7bymtYgeYr6B+3+vSodwDGsH/v/luhc1vykmj0Q9//i876qon1iVieqmsucSWLhFC51TIoblN5wuoJpgeEuH6iTR1okiIr6lGM1N03DSgTL704TFJsS69jOeEpTzFg/f1viCHQEC0Ql6nnlw5EK9YJLYx2SeJQsq9X8JjtBpUfU+e4oVdVUKaG36ErCErdr0jSAmI9pFNVC9GTqUJf2JyQGZU7mUozqByIVerqbSN3zZAwiC8tDDlGdERVYNOsdRKyFMeb9wmwUSlyr1yIU97XhkIl5aWntv26GrtsFFBVBi0QVfZAdUI0+ONk9VvJOjIp9wbxeOz9yFiXnjXldBpzWfeg83TCBD2kY/OZecPLyVME/AynpaaF4P/oY4OK61S9u156x4RDydkVO4RFaTRp44Xa9dZ6CCcLOibhkMCFMo2jlnnbYd4bQxGOl1cXNyEouDxS0jpVB16SeeZzizk7MUeEWfMhq28EVTVjrNVTXqHxgAvAy3rvqGI1lxHyeWHKeAehpNH1nvvQ+9Jc6rZpiJM0Y43G1TQ4LZQkbwwZDXlsEBpQO5JLioKgrtKo+nC03l/f38/puqIhxNsxmbq2JBKoMjacp5KOzw8ZIU1N/B/HCF1XJttAippqhHXmWmlWcnkUu5/+88X0bOvn0b9hnUg1YT4k398vuvVYhgIOge626LyYQFf5h1hVCGmBTh1Wb+eYJhKkwUwZuLhhKzK/bh5zHvYrWeCMBbvnhyf8DZn/1a8saDnjEluIkKB3qtawBlcR+EoLR5xSagn8LnjmSmi3Jf/+SCGxJpiEmhhAT/Fb5Y38FvydFkrRwFBwcwXDMrPhbIKpbHsy2YJDvqvS8+6jtknhh5vHMtzx82YlHvWzUmf/Pvzzknj5B5leBoqTw+fHp/cW8ZvLs6TfOBlnhjbxpofWZsKZaAE8/7CwsKnuC6e816hbJ7oCK+d4+PjJ76FAmbvusYBk6xjrpWQqEAS3JBaFa47qAuxLtHGP3Deo6Pz/+V/33+GrnpFrYZrXfw/6qDRaG5DIVxpRw2qEfCic4P6CBrw/WDvzNNrSH9xenoaS4xvQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAmgd8BNprwDDa4vm4AAAAASUVORK5CYII="
-          alt="logo"
-          className="w-36"
-        />
+        <img src={NavImage} alt="logo" className="w-36 h-14 " />
       </Link>
 
       {/* Desktop Links */}
@@ -68,20 +72,30 @@ export default function Navbar() {
       {/* Right Icons / Cart / User */}
       <div className="flex items-center gap-4">
         <Link to="/cart" className="relative">
-          <img src={icon} alt="cart" className="w-6 cursor-pointer" />
+          <img src={icon} alt="cart" className="w-5 cursor-pointer" />
         </Link>
 
         {userInfo ? (
           <>
-            <span className="text-gray-700 font-medium hidden sm:inline">
-              Hello, {userInfo.name}
-            </span>
-            <button
-              onClick={logout}
-              className="px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700 transition text-sm"
-            >
-              Logout
-            </button>
+            <Link to="/orders">
+              <span className="text-gray-700  text-sm font-mono hidden sm:inline">
+                Hello,{userInfo.name}
+              </span>
+            </Link>
+
+            <div className="tooltip tooltip-bottom">
+              <div className="tooltip-content ">
+                <div className="animate-bounce text-orange-100 -rotate-10 text-2xl font-black">
+                  Really!
+                </div>
+              </div>
+              <button
+                onClick={logout}
+                className="px-3 py-1 hidden sm:inline-block border border-gray-300 text-gray-600 rounded font-bold font-sans hover:bg-gray-300 hover:text-white transition text-sm"
+              >
+                Logout
+              </button>
+            </div>
           </>
         ) : (
           <div className="hidden sm:flex gap-2">
@@ -100,32 +114,37 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Mobile Hamburger */}
-        <button
-          className="sm:hidden focus:outline-none"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          <span className="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-          <span className="block w-6 h-0.5 bg-gray-700 mb-1"></span>
-          <span className="block w-6 h-0.5 bg-gray-700"></span>
-        </button>
+     
       </div>
+        <button
+            className="md:hidden text-2xl"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <FiMenu />
+          </button>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="absolute top-0 right-0 bottom-0 bg-white w-64 shadow-lg flex flex-col p-4 sm:hidden z-50">
-          <button
-            className="self-end mb-4 text-xl font-bold"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            ✕
+    <div
+        className={`fixed top-0 right-0 h-full w-72 bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center p-4 ">
+          <span className="font-semibold text-lg"></span>
+          <button onClick={() => setMobileMenuOpen(false)}>
+            <FiX className="text-2xl" />
           </button>
+        </div>
+
+        {/* Links */}
+        <div className="flex flex-col p-4 gap-4 text-gray-700">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
-              className="py-2 border-b"
               onClick={() => setMobileMenuOpen(false)}
+              className="border-b border-gray-500/60 pb-2 hover:text-black"
             >
               {link.name}
             </Link>
@@ -134,43 +153,55 @@ export default function Navbar() {
           {userInfo?.isAdmin && (
             <Link
               to="/admin"
-              className="py-2 border-b"
               onClick={() => setMobileMenuOpen(false)}
+              className="border-b pb-2 border-gray-500/60 hover:text-black"
             >
-              ADMIN PANEL
+              ADMIN
             </Link>
           )}
 
+          {/* Auth Section */}
           {userInfo ? (
-            <button
-              onClick={() => {
-                logout();
-                setMobileMenuOpen(false);
-              }}
-              className="mt-4 px-3 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition"
-            >
-              Logout
-            </button>
+            <>
+              <Link
+                to="/orders"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center border-b border-gray-500/60  pb-2 gap-2"
+              >
+                 MY ORDERS
+              </Link>
+
+              <button
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center  gap-2 text-red-500"
+              >
+                <FiLogOut /> LOGOUT
+              </button>
+            </>
           ) : (
-            <div className="mt-4 flex flex-col gap-2">
+            <>
               <Link
                 to="/login"
-                className="py-2 border-b"
                 onClick={() => setMobileMenuOpen(false)}
+                className="text-center border py-2 rounded-md"
               >
                 Login
               </Link>
+
               <Link
                 to="/signup"
-                className="py-2 border-b"
                 onClick={() => setMobileMenuOpen(false)}
+                className="text-center bg-black text-white py-2 rounded-md"
               >
                 Signup
               </Link>
-            </div>
+            </>
           )}
         </div>
-      )}
+        </div>
     </nav>
   );
 }

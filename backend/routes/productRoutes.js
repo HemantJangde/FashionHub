@@ -5,6 +5,7 @@ import {
   getProductById,
    updateProduct,
   deleteProduct,  
+  addMultipleProducts
 } from "../controllers/productController.js";
 
 import { protect, admin } from "../middleware/authMiddleware.js";
@@ -17,5 +18,6 @@ router.get("/", getProducts);
 router.get("/:id", getProductById);
 router.put("/:id", protect, admin,  upload.single("image"),updateProduct);
 router.delete("/:id", protect, admin, deleteProduct);
+router.post("/bulk", addMultipleProducts);
 
 export default router;

@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
-
+import toast from "react-hot-toast";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -73,6 +73,8 @@ export const CartProvider = ({ children }) => {
         },
       }
     );
+      toast.success("Item Remove From Cart")
+
 
     fetchCart(); // refresh cart
   } catch (error) {
@@ -80,8 +82,15 @@ export const CartProvider = ({ children }) => {
   }
 };
 
-const clearCart = () => {
-  setCart([]);
+const clearCart = async () => {
+  try {
+    await axios.delete("http://localhost:5000/api/cart/clear", {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    setCart([]);
+  } catch (error) {
+    console.error(error);
+  }
 };
   const addToCart = async (product) => {
     try {
@@ -94,8 +103,9 @@ const clearCart = () => {
           },
         }
       );
-
+      toast.success("Item Added to Cart")
       fetchCart();
+
     } catch (error) {
       console.error(error);
     }

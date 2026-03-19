@@ -1,4 +1,5 @@
 import React from 'react'
+import AboutImage from '../assets/20677.jpg'
 
 export default function About() {
   return (
@@ -16,8 +17,8 @@ export default function About() {
   {/* About Us Content */}
   <div className="my-10 flex flex-col md:flex-row gap-16">
     <img
-      className="w-full md:max-w-[450px]"
-      src="https://foreverbuy.in/assets/about_img-BAJyTXw9.png"
+      className="w-full md:max-w-[450px] shadow-lg"
+      src={AboutImage}
       alt="About Us"
     />
     <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600">

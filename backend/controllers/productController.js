@@ -173,3 +173,32 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const addMultipleProducts = async (req, res) => {
+  try {
+    const products = req.body; // expecting an array of product objects
+
+    if (!Array.isArray(products) || products.length === 0) {
+      return res.status(400).json({ message: "Products array is required" });
+    }
+
+    // Optional: validate each product
+    for (const p of products) {
+      if (!p.name || !p.price) {
+        return res.status(400).json({ message: "Each product must have a name and price" });
+      }
+    }
+
+    // Bulk insert
+    const createdProducts = await Product.insertMany(products);
+
+    res.status(201).json({
+      message: `${createdProducts.length} products added successfully`,
+      products: createdProducts,
+    });
+  } catch (error) {
+    console.error("Error adding multiple products:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

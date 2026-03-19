@@ -17,12 +17,17 @@ import Contact from "./pages/Contact";
 import Footer from "./components/Footer";
 import About from "./pages/About";
 import ProductDetailDynamic from "./pages/ProductDetailDynamic";
+import ScrollToTop from "./services/ScrollToTop";
 
 function App() {
+
+  
   return (
-    <div  class="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+    <div  class="px-4 border-none sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
     <BrowserRouter>
       <Navbar />
+       <ScrollToTop />
+
       <Routes>
         <Route path="/collection" element={<Home />} />
         <Route path="/" element={<Layout/>} />

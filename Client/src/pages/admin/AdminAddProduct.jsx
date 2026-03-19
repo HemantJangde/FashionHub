@@ -183,70 +183,88 @@ function AdminAddProduct() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow rounded-lg mt-10">
-      <h2 className="text-2xl font-bold mb-6 text-center">Add New Product</h2>
+  <div className="max-w-md mx-auto mt-10">
+  <div className="card bg-base-100 shadow-xl p-6">
+    
+    <h2 className="text-2xl font-bold text-center mb-6">
+      Add New Product
+    </h2>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Product Name"
-          required
-          onChange={handleChange}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+    <form onSubmit={handleSubmit} className="space-y-4">
 
-        <input
-          type="number"
-          name="price"
-          placeholder="Price"
-          required
-          onChange={handleChange}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+      {/* Name */}
+      <input
+        type="text"
+        name="name"
+        placeholder="Product Name"
+        required
+        onChange={handleChange}
+        className="input input-bordered w-full"
+      />
 
-        <textarea
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
-        />
+      {/* Price */}
+      <input
+        type="number"
+        name="price"
+        placeholder="Price"
+        required
+        onChange={handleChange}
+        className="input input-bordered w-full"
+      />
 
-        <input
-          type="number"
-          name="countInStock"
-          placeholder="Stock"
-          required
-          onChange={handleChange}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+      {/* Description */}
+      <textarea
+        name="description"
+        placeholder="Description"
+        onChange={handleChange}
+        className="textarea textarea-bordered w-full"
+      />
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+      {/* Stock */}
+      <input
+        type="number"
+        name="countInStock"
+        placeholder="Stock"
+        required
+        onChange={handleChange}
+        className="input input-bordered w-full"
+      />
 
-        {preview && (
-          <div className="mt-2 flex justify-center">
-            <img
-              src={preview}
-              alt="Preview"
-              className="w-28 h-28 object-cover rounded border"
-            />
-          </div>
+      {/* Image Upload */}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="file-input file-input-bordered w-full"
+      />
+
+      {/* Preview */}
+      {preview && (
+        <div className="flex justify-center">
+          <img
+            src={preview}
+            alt="Preview"
+            className="w-28 h-28 object-cover rounded-lg border"
+          />
+        </div>
+      )}
+
+      {/* Button */}
+      <button
+        type="submit"
+        disabled={loading}
+        className="btn hover:bg-gray-600 hover:text-white w-full"
+      >
+        {loading ? (
+          <span className="loading loading-spinner"></span>
+        ) : (
+          "Add Product"
         )}
+      </button>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
-        >
-          {loading ? "Uploading..." : "Add Product"}
-        </button>
-      </form>
-    </div>
+    </form>
+  </div>
+</div>
   );
 }
 

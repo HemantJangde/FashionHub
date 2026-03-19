@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
-import sendEmail from "../utils/sendEmail.js";
+// import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
 
 // ✅ REGISTER
@@ -14,12 +14,6 @@ export const registerUser = async (req, res) => {
 
   const user = await User.create({ name, email, password });
 
-  // send welcome email
-  await sendEmail(
-    email,
-    "Welcome to Fashion Store",
-    `<h2>Hello ${name}</h2><p>Welcome to our store 🎉</p>`
-  );
 
   res.status(201).json({
     _id: user._id,

@@ -1,4 +1,5 @@
 import React from 'react'
+import contactImage from '../assets/contact.jpg'
 
 export default function Contact() {
   return (
@@ -17,7 +18,7 @@ export default function Contact() {
   <div className="my-10 flex flex-col justify-center md:flex-row gap-10 mb-28">
     <img
       className="w-full md:max-w-[480px]"
-      src="https://foreverbuy.in/assets/contact_img-CyOum2vk.png"
+      src={contactImage }
       alt="Contact"
     />
     <div className="flex flex-col justify-center items-start gap-6">

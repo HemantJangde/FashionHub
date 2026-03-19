@@ -8,6 +8,8 @@ function AdminProducts() {
   const [editData, setEditData] = useState({});
   const [preview, setPreview] = useState(null);
   const { userInfo } = useAuth();
+  const [loadingId, setLoadingId] = useState(null);
+  const [actionType, setActionType] = useState(""); // "edit" or "delete"
 
   const fetchProducts = async () => {
     const { data } = await axios.get("http://localhost:5000/api/product");
@@ -64,125 +66,332 @@ function AdminProducts() {
     // Append new image if selected
     if (editData.imageFile) formData.append("image", editData.imageFile);
 
-    await axios.put(
-      `http://localhost:5000/api/product/${editId}`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    await axios.put(`http://localhost:5000/api/product/${editId}`, formData, {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     setEditId(null);
     setPreview(null);
     fetchProducts();
   };
 
-  return (
-    <div className="max-w-6xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Manage Products</h1>
+ return (
+  <div className="w-full">
+    {/* ================= MOBILE VIEW ================= */}
+    <div className="grid grid-cols-1 gap-4 md:hidden">
+      {products.map((p) => (
+        <div key={p._id} className="bg-white p-4 rounded-xl shadow border border-gray-100">
+          {editId === p._id ? (
+            <>
+              {/* IMAGE + NAME */}
+              <div className="flex gap-3 items-center">
+                <img
+                  src={preview || p.image}
+                  alt={p.name}
+                  className="w-16 h-16 object-cover rounded-lg"
+                />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {products.map((p) => (
-          <div
-            key={p._id}
-            className="border rounded-lg shadow p-4 flex flex-col items-center bg-white"
-          >
-            {editId === p._id ? (
-              <>
                 <input
                   name="name"
                   value={editData.name}
                   onChange={handleChange}
-                  className="border p-2 rounded w-full mb-2"
-                  placeholder="Name"
+                  className="input input-bordered input-sm w-full"
                 />
+              </div>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="mt-2 text-sm w-full"
+              />
+
+              {/* PRICE + STOCK */}
+              <div className="flex gap-2 mt-3">
                 <input
                   type="number"
                   name="price"
                   value={editData.price}
                   onChange={handleChange}
-                  className="border p-2 rounded w-full mb-2"
-                  placeholder="Price"
+                  className="input input-bordered input-sm w-full"
                 />
+
                 <input
                   type="number"
                   name="countInStock"
                   value={editData.countInStock}
                   onChange={handleChange}
-                  className="border p-2 rounded w-full mb-2"
-                  placeholder="Stock"
+                  className="input input-bordered input-sm w-full"
                 />
-                <textarea
-                  name="description"
-                  value={editData.description}
-                  onChange={handleChange}
-                  className="border p-2 rounded w-full mb-2"
-                  placeholder="Description"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="mb-2"
-                />
-                {preview && (
-                  <img
-                    src={preview}
-                    alt="Preview"
-                    className="w-24 h-24 object-cover mb-2 rounded"
-                  />
-                )}
-                <div className="flex gap-2 mt-2">
-                  <button
-                    onClick={updateProduct}
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => { setEditId(null); setPreview(null); }}
-                    className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
+              </div>
+
+              {/* ACTIONS */}
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={updateProduct}
+                  className="btn  btn-xs flex-1"
+                >
+                  Save
+                </button>
+
+                <button
+                  onClick={() => {
+                    setEditId(null);
+                    setPreview(null);
+                  }}
+                  className="btn btn-ghost btn-xs flex-1"
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* NORMAL VIEW */}
+              <div className="flex gap-3 items-center">
                 <img
                   src={p.image}
                   alt={p.name}
-                  className="w-32 h-32 object-cover rounded mb-2"
+                  className="w-16 h-16 object-cover rounded-lg"
                 />
-                <h3 className="text-lg font-semibold mb-1">{p.name}</h3>
-                <p className="font-medium mb-1">₹{p.price}</p>
-                <p className={`mb-2 ${p.countInStock > 0 ? "text-green-600" : "text-red-600"}`}>
-                  {p.countInStock > 0 ? `Stock: ${p.countInStock}` : "Out of Stock"}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => startEdit(p)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => deleteProduct(p._id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
+                <div>
+                  <h2 className="font-semibold text-sm">{p.name}</h2>
+                  <p className="text-xs text-gray-500">
+                    {p.category || "Fashion"}
+                  </p>
                 </div>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
+              </div>
+
+              <div className="mt-3 flex justify-between text-sm">
+                <p>₹{p.price}</p>
+                <span
+                  className={`badge ${
+                    p.countInStock > 0
+                      ? "badge-"
+                      : "badge-"
+                  }`}
+                >
+                  {p.countInStock > 0
+                    ? `${p.countInStock} in stock`
+                    : "Out"}
+                </span>
+              </div>
+
+              <div className="mt-3 flex gap-2">
+                <button
+                  onClick={() => {
+                    setLoadingId(p._id);
+                    setActionType("edit");
+
+                    setTimeout(() => {
+                      startEdit(p);
+                      setLoadingId(null);
+                    }, 200);
+                  }}
+                  className="btn  btn-xs flex-1"
+                  disabled={loadingId === p._id}
+                >
+                  {loadingId === p._id && actionType === "edit" ? (
+                    <span className="loading loading-spinner loading-xs"></span>
+                  ) : (
+                    "Edit"
+                  )}
+                </button>
+
+                <button
+                  onClick={async () => {
+                    setLoadingId(p._id);
+                    setActionType("delete");
+
+                    await deleteProduct(p._id);
+
+                    setLoadingId(null);
+                  }}
+                  className="btn btn btn-xs flex-1"
+                  disabled={loadingId === p._id}
+                >
+                  {loadingId === p._id && actionType === "delete" ? (
+                    <span className="loading loading-spinner loading-xs"></span>
+                  ) : (
+                    "Delete"
+                  )}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      ))}
     </div>
-  );
+
+    {/* ================= DESKTOP TABLE ================= */}
+    <div className="hidden md:block overflow-x-auto">
+      <table className="table w-full min-w-[700px]">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {products.map((p) => (
+            <tr key={p._id}>
+              {editId === p._id ? (
+                <>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={preview || p.image}
+                        className="w-12 h-12 rounded"
+                      />
+
+                      <input
+                        name="name"
+                        value={editData.name}
+                        onChange={handleChange}
+                        className="input input-bordered input-sm w-full"
+                      />
+                    </div>
+
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      className="mt-2 text-sm"
+                    />
+                  </td>
+
+                  <td>
+                    <input
+                      type="number"
+                      name="price"
+                      value={editData.price}
+                      onChange={handleChange}
+                      className="input input-bordered input-sm w-full"
+                    />
+                  </td>
+
+                  <td>
+                    <input
+                      type="number"
+                      name="countInStock"
+                      value={editData.countInStock}
+                      onChange={handleChange}
+                      className="input input-bordered input-sm w-full"
+                    />
+                  </td>
+
+                  <td>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={updateProduct}
+                        className="btn  btn-xs"
+                      >
+                        Save
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setEditId(null);
+                          setPreview(null);
+                        }}
+                        className="btn btn-ghost btn-xs"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={p.image}
+                        className="w-12 h-12 rounded"
+                      />
+                      <div>
+                        <div className="font-semibold">{p.name}</div>
+                        <div className="text-sm opacity-50">
+                          {p.category || "Fashion"}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>₹{p.price}</td>
+
+                  <td>
+                    <span
+                      className={`badge ${
+                        p.countInStock > 0
+                          ? "badge-success"
+                          : "badge-error"
+                      }`}
+                    >
+                      {p.countInStock > 0
+                        ? `Stock: ${p.countInStock}`
+                        : "Out"}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          setLoadingId(p._id);
+                          setActionType("edit");
+
+                          setTimeout(() => {
+                            startEdit(p);
+                            setLoadingId(null);
+                          }, 200);
+                        }}
+                        className="btn  btn-xs"
+                        disabled={loadingId === p._id}
+                      >
+                        {loadingId === p._id &&
+                        actionType === "edit" ? (
+                          <span className="loading loading-spinner loading-xs"></span>
+                        ) : (
+                          "Edit"
+                        )}
+                      </button>
+
+                      <button
+                        onClick={async () => {
+                          setLoadingId(p._id);
+                          setActionType("delete");
+
+                          await deleteProduct(p._id);
+
+                          setLoadingId(null);
+                        }}
+                        className="btn btn-error btn-xs"
+                        disabled={loadingId === p._id}
+                      >
+                        {loadingId === p._id &&
+                        actionType === "delete" ? (
+                          <span className="loading loading-spinner loading-xs"></span>
+                        ) : (
+                          "Delete"
+                        )}
+                      </button>
+                    </div>
+                  </td>
+                </>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
 }
 
 export default AdminProducts;

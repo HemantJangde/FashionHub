@@ -6,19 +6,19 @@ function AdminDashboard() {
       title: "Manage Products",
       description: "View, edit, or delete existing products",
       link: "/admin/products",
-      color: "bg-blue-500",
+    
     },
     {
       title: "Manage Orders",
       description: "Track and update all customer orders",
       link: "/admin/orders",
-      color: "bg-green-500",
+   
     },
     {
       title: "Add Product",
       description: "Create new products for your store",
       link: "/admin/add",
-      color: "bg-red-500",
+    
     },
   ];
 
@@ -31,7 +31,7 @@ function AdminDashboard() {
           <Link
             to={card.link}
             key={card.title}
-            className={`p-6 rounded-lg shadow hover:shadow-lg transition ${card.color} text-white flex flex-col justify-between`}
+            className={`p-6 rounded-lg shadow hover:shadow-lg transition ${card.color} text-gray-600 flex flex-col justify-between`}
           >
             <div>
               <h2 className="text-xl font-semibold mb-2">{card.title}</h2>
