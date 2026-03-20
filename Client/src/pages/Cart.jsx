@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { sendOrderEmail } from "../services/sendEmail";
 
@@ -12,7 +12,16 @@ export default function Cart() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
 
-  const [address, setAddress] = useState("");
+  // const [address, setAddress] = useState("");
+  const [address, setAddress] = useState({
+  houseNo: "",
+  street: "",
+  city: "",
+  state: "",
+  pincode: "",
+});
+
+
   const [loading, setLoading] = useState(false);
 
   // Calculate subtotal safely
@@ -27,18 +36,19 @@ export default function Cart() {
   };
 
   const handleRemove = (productId) => {
+    
     removeFromCart(productId);
   };
 
  const placeOrder = async () => {
-  if (!address.trim()) return toast.error("Please enter your delivery address!");
+  if (!address) return toast.error("Please enter your delivery address!");
   if (!cart.length) return toast.error("Your cart is empty!");
 
   try {
     setLoading(true);
 
     await axios.post(
-      "http://localhost:5000/api/orders",
+      "https://fashionhub-bzx6.onrender.com/api/orders",
       { address, paymentMethod: "COD", items: cart },
       {
         headers: {
@@ -58,8 +68,33 @@ export default function Cart() {
   }
 };
   if (!userInfo) return <p className="text-center py-10">Please login to view your cart.</p>;
+if (!cart.length) {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 text-center">
+      
+      {/* Icon */}
+      <div className="text-6xl mb-4">🛒</div>
 
-  if (!cart.length) return <p className="text-center py-10">Your cart is empty.</p>;
+      {/* Title */}
+      <h2 className="text-2xl font-semibold mb-2">
+        Your Cart is Empty
+      </h2>
+
+      {/* Subtitle */}
+      <p className="text-gray-500 mb-6">
+        Looks like you haven't added anything yet.
+      </p>
+
+      {/* CTA Button */}
+      <Link
+        to="/collection"
+        className="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition"
+      >
+        Start Shopping
+      </Link>
+    </div>
+  );
+}
 
   return (
   <div className="max-w-4xl mx-auto py-10 px-4 ">
@@ -127,7 +162,7 @@ export default function Cart() {
   </div>
 
   {/* Delivery Address */}
-<div className="mt-6">
+{/* <div className="mt-6">
   <label htmlFor="address" className="block text-gray-700 font-semibold mb-2">
     Delivery Address
   </label>
@@ -139,6 +174,92 @@ export default function Cart() {
     rows={4}
     className="w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
   />
+</div> */}
+
+{/* Delivery Address */}
+<div className="mt-6">
+  <h2 className="text-lg font-semibold mb-4">Delivery Address</h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    {/* Full Name */}
+    <input
+      type="text"
+      placeholder="Full Name"
+      value={address.fullName}
+      onChange={(e) =>
+        setAddress({ ...address, fullName: e.target.value })
+      }
+      className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+
+    {/* Phone */}
+    <input
+      type="text"
+      placeholder="Phone Number"
+      value={address.phone}
+      onChange={(e) =>
+        setAddress({ ...address, phone: e.target.value })
+      }
+      className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+
+    {/* House No */}
+    <input
+      type="text"
+      placeholder="House No."
+      value={address.houseNo}
+      onChange={(e) =>
+        setAddress({ ...address, houseNo: e.target.value })
+      }
+      className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+
+    {/* Street */}
+    <input
+      type="text"
+      placeholder="Street / Area"
+      value={address.street}
+      onChange={(e) =>
+        setAddress({ ...address, street: e.target.value })
+      }
+      className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+
+    {/* City */}
+    <input
+      type="text"
+      placeholder="City"
+      value={address.city}
+      onChange={(e) =>
+        setAddress({ ...address, city: e.target.value })
+      }
+      className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+
+    {/* State */}
+    <input
+      type="text"
+      placeholder="State"
+      value={address.state}
+      onChange={(e) =>
+        setAddress({ ...address, state: e.target.value })
+      }
+      className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+
+    {/* Pincode */}
+    <input
+      type="text"
+      placeholder="Pincode"
+      value={address.pincode}
+      onChange={(e) =>
+        setAddress({ ...address, pincode: e.target.value })
+      }
+      className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+    />
+
+  </div>
 </div>
 
   {/* Cart Totals */}

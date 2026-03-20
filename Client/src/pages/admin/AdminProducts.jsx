@@ -12,7 +12,7 @@ function AdminProducts() {
   const [actionType, setActionType] = useState(""); // "edit" or "delete"
 
   const fetchProducts = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/product");
+    const { data } = await axios.get("https://fashionhub-bzx6.onrender.com/api/product");
     setProducts(data);
   };
 
@@ -24,7 +24,7 @@ function AdminProducts() {
   const deleteProduct = async (id) => {
     if (!window.confirm("Delete this product?")) return;
 
-    await axios.delete(`http://localhost:5000/api/product/${id}`, {
+    await axios.delete(`https://fashionhub-bzx6.onrender.com/api/product/${id}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 
@@ -66,7 +66,7 @@ function AdminProducts() {
     // Append new image if selected
     if (editData.imageFile) formData.append("image", editData.imageFile);
 
-    await axios.put(`http://localhost:5000/api/product/${editId}`, formData, {
+    await axios.put(`https://fashionhub-bzx6.onrender.com/api/product/${editId}`, formData, {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
         "Content-Type": "multipart/form-data",

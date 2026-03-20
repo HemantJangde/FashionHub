@@ -14,7 +14,7 @@ function AdminOrders() {
         setLoading(true);
 
         const { data } = await axios.get(
-          "http://localhost:5000/api/orders",
+          "https://fashionhub-bzx6.onrender.com/api/orders",
           {
             headers: {
               Authorization: `Bearer ${userInfo.token}`,
@@ -22,7 +22,6 @@ function AdminOrders() {
           }
         );
 
-        console.log("orders", data); // ✅ correct place
         setOrders(data);
       } catch (err) {
         console.error(err);
@@ -34,10 +33,44 @@ function AdminOrders() {
 
     if (userInfo) fetchOrders();
   }, [userInfo]);
+if (loading) {
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-10 animate-pulse space-y-6">
+      
+      {[1, 2, 3].map((_, i) => (
+        <div
+          key={i}
+          className="border rounded-md p-5 space-y-4"
+        >
+          {/* Top Row (Order Info) */}
+          <div className="flex justify-between items-center">
+            <div className="h-5 bg-gray-300 rounded w-1/3"></div>
+            <div className="h-5 bg-gray-300 rounded w-20"></div>
+          </div>
 
-  if (loading)
-    return <p className="text-center py-10 text-gray-500">Loading orders...</p>;
+          {/* Product Row */}
+          <div className="flex gap-4 items-center">
+            <div className="w-20 h-20 bg-gray-300 rounded-md"></div>
 
+            <div className="flex-1 space-y-2">
+              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+            </div>
+
+            <div className="h-4 bg-gray-300 rounded w-16"></div>
+          </div>
+
+          {/* Bottom Row */}
+          <div className="flex justify-between">
+            <div className="h-4 bg-gray-300 rounded w-24"></div>
+            <div className="h-8 bg-gray-300 rounded w-28"></div>
+          </div>
+        </div>
+      ))}
+
+    </div>
+  );
+}
   if (error)
     return <p className="text-center py-10 text-red-500">{error}</p>;
 
@@ -83,7 +116,7 @@ function AdminOrders() {
               order.orderItems.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b pb-3 last:border-none"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-400 pb-3 last:border-none"
                 >
                   {item.product ? (
                     <>
@@ -126,12 +159,13 @@ function AdminOrders() {
           {/* TOTAL */}
           <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <p className="font-semibold text-gray-800 text-base sm:text-lg">
-              Total: ₹{total}
+              Total: 
+            </p>
+             <p className="font-semibold text-gray-800 text-base sm:text-lg">
+             ₹{total +500}
             </p>
 
-            <span className="w-fit px-3 py-1 text-xs sm:text-sm rounded-full bg-yellow-100 text-yellow-800">
-              Pending
-            </span>
+          
           </div>
         </div>
       );

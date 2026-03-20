@@ -1,7 +1,7 @@
 import emailjs from "@emailjs/browser";
 
 export const sendOrderEmail = async (user, cart, address) => {
-  console.log(user);
+  // console.log(user);
   
   try {
     const templateParams = {
@@ -18,7 +18,7 @@ export const sendOrderEmail = async (user, cart, address) => {
       "RHnMr1SdOX55l6_pn"
     );
 
-    console.log("✅ Email sent successfully");
+    // console.log("✅ Email sent successfully");
   } catch (error) {
     console.error("❌ Email error:", error);
   }
@@ -46,7 +46,7 @@ export const sendLoginEmail = async (data) => {
       "RHnMr1SdOX55l6_pn"    // replace
     );
 
-    console.log("✅ Login email sent");
+    // console.log("✅ Login email sent");
   } catch (error) {
     console.error("❌ Email error:", error);
   }

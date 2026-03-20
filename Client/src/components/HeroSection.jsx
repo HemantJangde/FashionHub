@@ -3,7 +3,7 @@ import HeroImage from '../assets/home3.jpg'
 export default function HeroSection() {
   
   return (
-   <div className="flex flex-col sm:flex-row border border-gray-100">
+   <div className="flex  flex-col sm:flex-row border border-gray-400/30">
   {/* Text Section */}
   <div className="w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0">
     <div className="text-[#414141]">

@@ -30,7 +30,7 @@ function Login() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://fashionhub-bzx6.onrender.com/api/auth/login",
         form
       );
 
@@ -79,7 +79,7 @@ function Login() {
           type="submit"
           disabled={loading}
           className={`w-full py-3 rounded text-white font-semibold ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-400 hover:text-black"
           }`}
         >
           {loading ? "Logging in..." : "Login"}
@@ -90,7 +90,7 @@ function Login() {
         Don't have an account?{" "}
         <span
           onClick={() => navigate("/signup")}
-          className="text-blue-600 hover:underline cursor-pointer"
+          className="text-black font-bold hover:underline cursor-pointer"
         >
           Register
         </span>

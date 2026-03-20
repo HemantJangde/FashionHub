@@ -44,7 +44,7 @@
 //         formData.append("image", DEFAULT_IMAGE); // send default image URL
 //       }
 
-//       await axios.post("http://localhost:5000/api/products", formData, {
+//       await axios.post("https://fashionhub-bzx6.onrender.com/api/products", formData, {
 //         headers: {
 //           Authorization: `Bearer ${userInfo.token}`,
 //           "Content-Type": "multipart/form-data",
@@ -121,6 +121,7 @@ function AdminAddProduct() {
     name: "",
     price: "",
     description: "",
+    category: "",
     countInStock: "",
   });
 
@@ -156,13 +157,14 @@ function AdminAddProduct() {
       const formData = new FormData();
       formData.append("name", form.name);
       formData.append("price", form.price);
+      formData.append("category", form.category);
       formData.append("description", form.description);
       formData.append("countInStock", form.countInStock);
 
       if (image) formData.append("image", image); // optional
 
       await axios.post(
-        "http://localhost:5000/api/product",
+        "https://fashionhub-bzx6.onrender.com/api/product",
         formData,
         {
           headers: {
@@ -212,6 +214,13 @@ function AdminAddProduct() {
         className="input input-bordered w-full"
       />
 
+  <textarea
+  
+        name="category"
+        placeholder="category (Start with capital letter)"
+        onChange={handleChange}
+        className="input input-bordered w-full"
+      />
       {/* Description */}
       <textarea
         name="description"

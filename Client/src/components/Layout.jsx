@@ -22,28 +22,39 @@ export default function Layout() {
       <Policy />
 
       {/* Newsletter Section */}
-      <div className="text-center py-10">
-        <p className="text-2xl font-medium text-gray-800">
-          Subscribe now &amp; get 20% off
-        </p>
-        <p className="text-gray-400 mt-3">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-        </p>
-        <form className="w-full sm:w-1/2 flex items-center gap-3 mx-auto my-6 border pl-3">
-          <input
-            className="w-full sm:flex-1 outline-none py-2 px-2"
-            type="email"
-            placeholder="Enter your email"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-black text-white text-xs px-10 py-2 sm:py-4"
-          >
-            SUBSCRIBE
-          </button>
-        </form>
-      </div>
+      <div className="text-center py-14 px-4 bg-gray-50 rounded-lg shadow-sm">
+  
+  {/* Heading */}
+  <p className="text-3xl font-semibold text-gray-900">
+    Join FashionHub & Get 20% Off
+  </p>
+
+  {/* Subtext */}
+  <p className="text-gray-500 mt-3 max-w-xl mx-auto">
+    Subscribe to get exclusive deals, latest fashion trends, and early access
+    to new collections.
+  </p>
+
+  {/* Form */}
+  <form className="w-full sm:w-1/2  flex items-center mx-auto mt-6 border rounded-full overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-offset-gray-400 transition">
+    
+    <input
+      className="w-full px-4 py-3 outline-none text-sm"
+      type="email"
+      placeholder="Enter your email address"
+      required
+    />
+
+    <button
+      type="submit"
+      className="bg-black  text-white text-sm px-6 py-3 hover:bg-gray-800 transition"
+    >
+      SUBSCRIBE
+    </button>
+
+  </form>
+
+</div>
     </div>
   );
 }

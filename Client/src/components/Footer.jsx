@@ -47,7 +47,7 @@ export default function Footer() {
       <div>
         <hr className='text-blue-100' />
         <p className="py-5 text-sm text-center">
-          © 2026 Fashion Hub. All Rights Reserved.
+          © 2026 Asifa Azhar. All Rights Reserved.
         </p>
       </div>
     </div>

@@ -14,4 +14,4 @@ export default function ProductCard({ product }) {
       <p className="text-sm font-medium">₹{product.price}</p>
     </Link>
   );
-}
+} 

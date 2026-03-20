@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { FiFilter, FiX ,FiSearch } from "react-icons/fi";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -9,16 +10,20 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   // Filters & search
+  const [showFilters, setShowFilters] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState(""); // "low-high" | "high-low"
   const [categories, setCategories] = useState([]);
-     const { addToCart } = useCart();
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/product");
+        const { data } = await axios.get(
+          "https://fashionhub-bzx6.onrender.com/api/product",
+        );
         setProducts(data);
         setFilteredProducts(data);
 
@@ -39,78 +44,155 @@ function Home() {
   }, []);
 
   // Apply filters & sorting
-  useEffect(() => {
-    let temp = [...products];
+ useEffect(() => {
+  let temp = [...products];
 
-    // Search
-    if (search) {
-      temp = temp.filter((p) =>
-        p.name.toLowerCase().includes(search.toLowerCase()),
-      );
-    }
-
-    // Category filter
-    if (category !== "All") {
-      temp = temp.filter((p) => p.category === category);
-    }
-
-    // Sorting
-    if (sort === "low-high") {
-      temp.sort((a, b) => a.price - b.price);
-    } else if (sort === "high-low") {
-      temp.sort((a, b) => b.price - a.price);
-    }
-
-    setFilteredProducts(temp);
-  }, [search, category, sort, products]);
-
-  if (loading)
-    return (
-      <p className="text-center py-10 text-gray-500">Loading products...</p>
+  // 🔍 Search filter
+  if (search) {
+    temp = temp.filter((p) =>
+      p.name.toLowerCase().includes(search.toLowerCase())
     );
+  }
 
-  if (!products.length)
-    return (
-      <p className="text-center py-10 text-gray-500">No products found.</p>
-    );
+  // 🏷️ Category filter
+  if (category && category !== "All") {
+    temp = temp.filter((p) => p.category === category);
+  }
+
+  // 💰 Price sorting
+  if (sort === "low-high") {
+    temp.sort((a, b) => a.price - b.price);
+  } else if (sort === "high-low") {
+    temp.sort((a, b) => b.price - a.price);
+  }
+
+  // Update filtered products
+  setFilteredProducts(temp);
+}, [search, category, sort, products]);
+ if (loading) {
+  return (
+    <div className="p-6">
+      {/* Title Skeleton */}
+      <div className="h-6 w-40 bg-base-300 rounded mb-6 animate-pulse"></div>
+
+      {/* Grid Skeleton */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {[...Array(8)].map((_, index) => (
+          <div
+            key={index}
+            className="card bg-base-100 shadow-md p-4 space-y-4"
+          >
+            {/* Image Skeleton */}
+            <div className="skeleton h-40 w-full rounded"></div>
+
+            {/* Text Skeleton */}
+            <div className="skeleton h-4 w-3/4"></div>
+            <div className="skeleton h-4 w-1/2"></div>
+
+            {/* Button Skeleton */}
+            <div className="skeleton h-10 w-full rounded"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+// import { FiSearch } from "react-icons/fi";
+
+if (!products.length) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center py-16 px-4">
+      {/* Icon */}
+      <div className="bg-base-200 p-6 rounded-full mb-4">
+        <FiSearch size={40} className="text-gray-500" />
+      </div>
+
+      {/* Title */}
+      <h2 className="text-xl font-semibold text-gray-700">
+        No Products Found
+      </h2>
+
+      {/* Description */}
+      <p className="text-gray-500 mt-2 max-w-md">
+        We couldn’t find any products matching your search or filters. Try adjusting your filters or search term.
+      </p>
+
+      {/* Action Button */}
+      <button
+        onClick={() => {
+          setSearch("");
+          setCategory("All");
+          setSort("");
+        }}
+        className="btn btn-primary mt-6"
+      >
+        Clear Filters
+      </button>
+    </div>
+  );
+}
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-4">
       {/* <h1 className="text-2xl font-semibold mb-6">All Products</h1> */}
 
       {/* Filters */}
-      <div className="flex flex-col  sm:flex-row gap-4 mb-6 items-center">
+   <div className="mb-6">
+      {/* Filter Toggle Button */}
+     {/* Filter Toggle Button */}
+      <button
+        onClick={() => setShowFilters(!showFilters)}
+        className="btn bg-white text-black rounded-lg font-mono font-semibold gap-2 hover:bg-black/50 hover:text-white hover:font-bold"
+      >
+        {showFilters ? <FiX size={20} /> : <FiFilter size={20} />}
+        {showFilters ? "Hide Filters" : "Show Filters"}
+      </button>
+      {/* Filter Options */}
+      {showFilters && (
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 items-center justify-between bg-white p-4 rounded-lg shadow-md">
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition placeholder-gray-400"
+          />
 
-        
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+          {/* Category Dropdown */}
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          >
+            <option value="All">All Categories</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Kids">Kids</option>
+            <option value="Accessories">Accessories</option>
+          </select>
 
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className=" border border-gray-200 text-shadow-gray-800 px-3 py-2 rounded-lg  font-bold transition focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          <option value="">Sort By</option>
-          <option value="low-high">Price: Low to High</option>
-          <option value="high-low">Price: High to Low</option>
-        </select>
+          {/* Sort Dropdown */}
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          >
+            <option value="">Sort By</option>
+            <option value="low-high">Price: Low to High</option>
+            <option value="high-low">Price: High to Low</option>
+          </select>
 
-        <button
-          onClick={() => {
-            setSearch("");
-            setCategory("All");
-            setSort("");
-          }}
-          className="  border border-gray-200 text-shadow-gray-800 px-3 py-2 rounded-lg hover:bg-gray-600 hover:text-white font-bold transition"
-        >
-          Reset
-        </button>
-      </div>
+          {/* Reset Button */}
+          {/* <button
+            onClick={resetFilters}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold shadow hover:bg-red-600 transition"
+          >
+            Reset
+          </button> */}
+        </div>
+      )}
+    </div>
 
       {/* Product Grid */}
       <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -142,7 +224,12 @@ function Home() {
               <div className="card-actions justify-end mt-2">
                 <button
                   className=" btn border-t-neutral-50"
-                 onClick={() => addToCart(product)}
+                  onClick={
+                    () => {
+                      // addToCart(product);
+                      navigate("/cart");
+                    } // redirect
+                  }
                 >
                   Buy Now
                 </button>
@@ -151,11 +238,41 @@ function Home() {
           </Link>
         ))}
 
-        {!filteredProducts.length && (
-          <p className="col-span-full text-center py-10 text-gray-500">
-            No products match your filters.
-          </p>
-        )}
+       {!filteredProducts.length && (
+  <div className="col-span-full flex justify-center">
+    <div className="card bg-base-100 p-8 max-w-md text-center">
+      
+      {/* Icon */}
+      <div className="flex justify-center mb-4">
+        <div className="bg-base-200 p-4 rounded-full">
+          <FiFilter size={32} className="text-gray-500" />
+        </div>
+      </div>
+
+      {/* Title */}
+      <h2 className="text-lg font-semibold text-gray-700">
+        No Matching Products
+      </h2>
+
+      {/* Description */}
+      <p className="text-gray-500 mt-2 text-sm">
+        Try changing your filters or search terms to find what you're looking for.
+      </p>
+
+      {/* Action Button */}
+      <button
+        onClick={() => {
+          setSearch("");
+          setCategory("All");
+          setSort("");
+        }}
+        className="btn bg-white mt-5 text-black rounded-lg font-mono font-semibold gap-2 hover:bg-black/50 hover:text-white hover:font-bold"
+      >
+        Clear Filters
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );
